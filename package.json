@@ -1,0 +1,27 @@
+{
+  "name": "typed-redux-actions",
+  "version": "1.0.0",
+  "description": "Utility types to create type-safe Redux actions",
+  "main": "index.d.ts",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/parzh/typed-redux-actions.git"
+  },
+  "keywords": [
+    "typescript",
+    "type",
+    "typed",
+    "redux",
+    "action"
+  ],
+  "author": "Dmitry Parzhitsky <parzhitsky@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/parzh/typed-redux-actions/issues"
+  },
+  "homepage": "https://gitlab.com/parzh/typed-redux-actions#readme"
+}
