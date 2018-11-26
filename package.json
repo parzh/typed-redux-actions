@@ -1,7 +1,8 @@
 {
-  "name": "typed-redux-actions",
+  "name": "@parzh/typed-redux-actions",
   "version": "1.0.0",
   "description": "Utility types to create type-safe Redux actions",
+  "private": false,
   "main": "index.d.ts",
   "types": "index.d.ts",
   "scripts": {
