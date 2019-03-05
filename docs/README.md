@@ -267,4 +267,7 @@ export type Payload<Type extends ActionTypeFrom<PayloadMap>> =
 
 The `Payload<…>` generic shows slightly different picture, because it cares only about actions with payload. That's why we make more specific `ActionTypeFrom<PayloadMap>` instead of just `ActionType`, that also holds actions without payload.
 
+See also [demo].
+
   [generic types]: https://www.typescriptlang.org/docs/handbook/generics.html
+  [demo]: /docs/demo.ts
