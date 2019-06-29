@@ -18,7 +18,7 @@ type PayloadMap = {
 };
 
 type ActionTypeWithPayload =
-	ActionTypeFrom<PayloadMap>; // "SET_USER_NAME" | "SET_USER_AGE"
+	ActionTypeFrom<PayloadMap>;
 
 // ***
 
@@ -37,7 +37,7 @@ type ActionTypeWithoutPayload =
 // ***
 
 type ActionType =
-	ActionTypeFrom<PayloadMap, ActionTypeWithoutPayload>; // "SET_USER_NAME" | "SET_USER_AGE" | "LOG_OUT" | "RELOAD_PAGE"
+	ActionTypeFrom<PayloadMap, ActionTypeWithoutPayload>;
 
 type Action<Type extends ActionType> =
 	ActionFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
