@@ -8,21 +8,13 @@ export type ActionTypeFrom<
 
 // ***
 
-export type PayloadFrom<
-	PayloadMap extends object,
-	Type extends ActionTypeFrom<PayloadMap, never>,
-> =
-	| PayloadMap[Type];
-
-// ***
-
 /** @private */
 type _WithPayload_Action<
 	PayloadMap extends object,
 	Type extends ActionTypeFrom<PayloadMap, never>,
 > = {
 	type: Type;
-	payload: PayloadFrom<PayloadMap, Type>;
+	payload: PayloadMap[Type];
 };
 
 /** @private */
@@ -53,7 +45,7 @@ type _WithPayload_ActionCreator<
 	PayloadMap extends object,
 	Type extends ActionTypeFrom<PayloadMap, never>,
 > = {
-	(payload: PayloadFrom<PayloadMap, Type>): _WithPayload_Action<PayloadMap, Type>;
+	(payload: PayloadMap[Type]): _WithPayload_Action<PayloadMap, Type>;
 };
 
 /** @private */
