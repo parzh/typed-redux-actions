@@ -131,21 +131,6 @@ setUserName(42);
 // [ts] Type 'number' is not assignable to type 'string'.
 ```
 
-## 2.4 Payload
-Constraints for **payload** might also be useful in some situations:
-
-```ts
-const payload: Payload<"LOG_OUT"> = undefined;
-//                     ^^^^^^^^^
-// [ts] Type '"LOG_OUT"' is not assignable to type '"SET_USER_NAME"'.
-```
-
-```ts
-const payload: Payload<"SET_USER_NAME"> = 42;
-//    ^^^^^^^
-// [ts] Type 'number' is not assignable to type 'string'.
-```
-
 # 3. Implementing type-safety
 
 ### TL;DR:
@@ -193,12 +178,12 @@ type PayloadMap = {
 ```
 
 ## 3.3 Create useful generics
-In the "**2. Type-safety Roadmap**" section, types `Action<…>`, `ActionCreator<…>` and `Payload<…>` are [generic types], while the `ActionType` is just a union of all given action types.
+In the "**2. Type-safety Roadmap**" section, types `Action<…>`, and `ActionCreator<…>` are [generic types], while the `ActionType` is just a union of all given action types.
 
 All these models have to be created though. In order to do that, the `@parzh/typed-redux-actions` package provides several generics; but let's call them "utilities", so that creators are not confused with creations. The utilities have convenient similarities: all end with "`…From`" suffix and all obey the same scheme of type parameters:
 
 ```ts
-<PayloadMap, ActionTypeWithoutPayload /* (if needed) */, Type extends ActionType /* (if needed) */>
+<PayloadMap, ActionTypeWithoutPayload, Type extends ActionType /* (if needed) */>
 ```
 
 ### 3.3.1 ActionType
@@ -240,17 +225,6 @@ import { ActionCreatorFrom } from "@parzh/typed-redux-actions";
 
 export type ActionCreator<Type extends ActionType> =
     ActionCreatorFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
-```
-
-### 3.3.4 Payload
-
-The `Payload<…>` generic shows slightly different picture, because it cares only about actions with payload. That's why, when creating it with `PayloadFrom<…>` utility, in type guard we use more specific `ActionTypeFrom<PayloadMap>` (omitting the second type parameter) instead of simply `ActionType` which unnecessarily adds actions without payload.
-
-```ts
-import { PayloadFrom } from "@parzh/typed-redux-actions";
-
-export type Payload<Type extends ActionTypeFrom<PayloadMap>> =
-    PayloadFrom<PayloadMap, Type>;
 ```
 
 See also [demo].

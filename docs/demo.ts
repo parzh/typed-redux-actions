@@ -1,7 +1,6 @@
 import {
 	ActionCreatorFrom,
 	ActionTypeFrom,
-	PayloadFrom,
 	ActionFrom,
 } from "..";
 
@@ -16,9 +15,6 @@ type PayloadMap = {
 	[SET_USER_NAME]: string;
 	[SET_USER_AGE]: number;
 };
-
-type ActionTypeWithPayload =
-	ActionTypeFrom<PayloadMap>;
 
 // ***
 
@@ -44,9 +40,6 @@ type Action<Type extends ActionType> =
 
 type ActionCreator<Type extends ActionType> =
 	ActionCreatorFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
-
-type Payload<Type extends ActionTypeWithPayload> =
-	PayloadFrom<PayloadMap, Type>;
 
 // ***
 
@@ -94,12 +87,3 @@ const actionCreator3: ActionCreator<"SET_USER_NAME"> = (name) => ({
 
 // @ts-ignore (Argument of type '42' is not assignable)
 actionCreator3(42);
-
-// @ts-ignore (Type '"LOG_OUT"' does not satisfy the constraint)
-const payload0: Payload<"LOG_OUT"> = undefined;
-
-// @ts-ignore (Type '42' is not assignable to type 'string'.)
-const payload1: Payload<"SET_USER_NAME"> = 42;
-
-// @ts-ignore (Type '"John Doe"' is not assignable to type 'number'.)
-const payload2: Payload<"SET_USER_AGE"> = "John Doe";
