@@ -1,33 +1,33 @@
 export type ActionTypeFrom<
-	ActionTypeToPayloadTypeMap extends object,
-	ActionTypeWithoutPayload extends string,
+	PayloadMap extends object,
+	WithoutPayload_ActionType extends string,
 > =
-	| keyof ActionTypeToPayloadTypeMap
-	| ActionTypeWithoutPayload
+	| keyof PayloadMap
+	| WithoutPayload_ActionType
 	;
 
 export type PayloadFrom<
-	ActionTypeToPayloadTypeMap extends object,
-	Type extends ActionTypeFrom<ActionTypeToPayloadTypeMap, never>,
+	PayloadMap extends object,
+	Type extends ActionTypeFrom<PayloadMap, never>,
 > =
-	| ActionTypeToPayloadTypeMap[Type];
+	| PayloadMap[Type];
 
 export type ActionFrom<
-	ActionTypeToPayloadTypeMap extends object,
-	ActionTypeWithoutPayload extends string,
-	Type extends ActionTypeFrom<ActionTypeToPayloadTypeMap, ActionTypeWithoutPayload>,
+	PayloadMap extends object,
+	WithoutPayload_ActionType extends string,
+	Type extends ActionTypeFrom<PayloadMap, WithoutPayload_ActionType>,
 > = {
 	type: Type;
-} & (Type extends keyof ActionTypeToPayloadTypeMap ? {
-	payload: PayloadFrom<ActionTypeToPayloadTypeMap, Type>;
+} & (Type extends keyof PayloadMap ? {
+	payload: PayloadFrom<PayloadMap, Type>;
 } : {});
 
 export type ActionCreatorFrom<
-	ActionTypeToPayloadTypeMap extends object,
-	ActionTypeWithoutPayload extends string,
-	Type extends ActionTypeFrom<ActionTypeToPayloadTypeMap, ActionTypeWithoutPayload>,
+	PayloadMap extends object,
+	WithoutPayload_ActionType extends string,
+	Type extends ActionTypeFrom<PayloadMap, WithoutPayload_ActionType>,
 > = {
 	(
-		...arg: (Type extends keyof ActionTypeToPayloadTypeMap ? [ ActionTypeToPayloadTypeMap[Type] ] : [])
-	): ActionFrom<ActionTypeToPayloadTypeMap, ActionTypeWithoutPayload, Type>;
+		...arg: (Type extends keyof PayloadMap ? [ PayloadMap[Type] ] : [])
+	): ActionFrom<PayloadMap, WithoutPayload_ActionType, Type>;
 };
