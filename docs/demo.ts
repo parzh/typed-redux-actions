@@ -1,5 +1,6 @@
 import {
 	ActionCreatorFrom,
+	ActionTypeFrom,
 	ActionFrom,
 } from "../lib";
 
@@ -29,10 +30,13 @@ interface PayloadMap {
 
 // ***
 
-type Action<Type extends keyof PayloadMap> =
+type ActionType =
+	ActionTypeFrom<PayloadMap>;
+
+type Action<Type extends ActionType = ActionType> =
 	ActionFrom<PayloadMap, Type>;
 
-type ActionCreator<Type extends keyof PayloadMap> =
+type ActionCreator<Type extends ActionType = ActionType> =
 	ActionCreatorFrom<PayloadMap, Type>;
 
 // ***
@@ -78,3 +82,33 @@ const actionCreator3: ActionCreator<"SET_USER_NAME"> = (name) => ({
 
 // @ts-ignore (Argument of type '42' is not assignable)
 actionCreator3(42);
+
+// ***
+
+interface State {
+	name: string;
+	age: number;
+	loggedIn: boolean;
+}
+
+function reducer0(state: State, action: Action): State {
+	switch (action.type) {
+		// @ts-ignore (Type '"SET_NAME"' is not comparable)
+		case "SET_NAME":
+			break;
+
+		case "SET_USER_NAME":
+			// @ts-ignore (Type 'string' is not assignable to type 'number')
+			return { ...state, age: action.payload };
+
+		case "SET_USER_AGE":
+			// @ts-ignore (Type 'number' is not assignable to type 'string')
+			return { ...state, name: action.payload };
+
+		case "LOG_OUT":
+			// @ts-ignore (Property 'payload' does not exist)
+			return { ...state, loggedIn: action.payload };
+	}
+
+	return state;
+}
