@@ -6,11 +6,15 @@ export type ActionTypeFrom<
 	| WithoutPayload_ActionType
 	;
 
+// ***
+
 export type PayloadFrom<
 	PayloadMap extends object,
 	Type extends ActionTypeFrom<PayloadMap, never>,
 > =
 	| PayloadMap[Type];
+
+// ***
 
 export type ActionFrom<
 	PayloadMap extends object,
@@ -21,6 +25,8 @@ export type ActionFrom<
 } & (Type extends keyof PayloadMap ? {
 	payload: PayloadFrom<PayloadMap, Type>;
 } : {});
+
+// ***
 
 export type ActionCreatorFrom<
 	PayloadMap extends object,
