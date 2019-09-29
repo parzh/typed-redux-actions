@@ -1,12 +1,16 @@
 export type ActionTypeFrom<
 	ActionTypeToPayloadTypeMap extends object,
 	ActionTypeWithoutPayload extends string,
-> = (keyof ActionTypeToPayloadTypeMap) | ActionTypeWithoutPayload;
+> =
+	| keyof ActionTypeToPayloadTypeMap
+	| ActionTypeWithoutPayload
+	;
 
 export type PayloadFrom<
 	ActionTypeToPayloadTypeMap extends object,
 	Type extends ActionTypeFrom<ActionTypeToPayloadTypeMap, never>,
-> = ActionTypeToPayloadTypeMap[Type];
+> =
+	| ActionTypeToPayloadTypeMap[Type];
 
 export type ActionFrom<
 	ActionTypeToPayloadTypeMap extends object,
@@ -14,7 +18,7 @@ export type ActionFrom<
 	Type extends ActionTypeFrom<ActionTypeToPayloadTypeMap, ActionTypeWithoutPayload>,
 > = {
 	type: Type;
-} & (Type extends (keyof ActionTypeToPayloadTypeMap) ? {
+} & (Type extends keyof ActionTypeToPayloadTypeMap ? {
 	payload: PayloadFrom<ActionTypeToPayloadTypeMap, Type>;
 } : {});
 
@@ -24,6 +28,6 @@ export type ActionCreatorFrom<
 	Type extends ActionTypeFrom<ActionTypeToPayloadTypeMap, ActionTypeWithoutPayload>,
 > = {
 	(
-		...arg: (Type extends (keyof ActionTypeToPayloadTypeMap) ? [ ActionTypeToPayloadTypeMap[Type] ] : [])
+		...arg: (Type extends keyof ActionTypeToPayloadTypeMap ? [ ActionTypeToPayloadTypeMap[Type] ] : [])
 	): ActionFrom<ActionTypeToPayloadTypeMap, ActionTypeWithoutPayload, Type>;
 };
