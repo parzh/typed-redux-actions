@@ -16,15 +16,35 @@ export type PayloadFrom<
 
 // ***
 
+/** @private */
+type _WithPayload_Action<
+	PayloadMap extends object,
+	Type extends ActionTypeFrom<PayloadMap, never>,
+> = {
+	type: Type;
+	payload: PayloadFrom<PayloadMap, Type>;
+};
+
+/** @private */
+type _WithoutPayload_Action<
+	WithoutPayload_ActionType extends string,
+	Type extends ActionTypeFrom<never, WithoutPayload_ActionType>,
+> = {
+	type: Type;
+};
+
 export type ActionFrom<
 	PayloadMap extends object,
 	WithoutPayload_ActionType extends string,
 	Type extends ActionTypeFrom<PayloadMap, WithoutPayload_ActionType>,
-> = {
-	type: Type;
-} & (Type extends keyof PayloadMap ? {
-	payload: PayloadFrom<PayloadMap, Type>;
-} : {});
+> =
+	Type extends keyof PayloadMap ?
+		_WithPayload_Action<PayloadMap, Type>
+	:
+	Type extends WithoutPayload_ActionType ?
+		_WithoutPayload_Action<WithoutPayload_ActionType, Type>
+	:
+		never;
 
 // ***
 
