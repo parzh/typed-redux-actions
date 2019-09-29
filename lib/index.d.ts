@@ -9,20 +9,20 @@ export type ActionTypeFrom<
 // ***
 
 /** @private */
+type _WithoutPayload_Action<
+	WithoutPayload_ActionType extends string,
+	Type extends ActionTypeFrom<never, WithoutPayload_ActionType>,
+> = {
+	type: Type;
+};
+
+/** @private */
 type _WithPayload_Action<
 	PayloadMap extends object,
 	Type extends ActionTypeFrom<PayloadMap, never>,
 > = {
 	type: Type;
 	payload: PayloadMap[Type];
-};
-
-/** @private */
-type _WithoutPayload_Action<
-	WithoutPayload_ActionType extends string,
-	Type extends ActionTypeFrom<never, WithoutPayload_ActionType>,
-> = {
-	type: Type;
 };
 
 export type ActionFrom<
@@ -41,19 +41,19 @@ export type ActionFrom<
 // ***
 
 /** @private */
-type _WithPayload_ActionCreator<
-	PayloadMap extends object,
-	Type extends ActionTypeFrom<PayloadMap, never>,
-> = {
-	(payload: PayloadMap[Type]): _WithPayload_Action<PayloadMap, Type>;
-};
-
-/** @private */
 type _WithoutPayload_ActionCreator<
 	WithoutPayload_ActionType extends string,
 	Type extends ActionTypeFrom<never, WithoutPayload_ActionType>,
 > = {
 	(): _WithoutPayload_Action<WithoutPayload_ActionType, Type>;
+};
+
+/** @private */
+type _WithPayload_ActionCreator<
+	PayloadMap extends object,
+	Type extends ActionTypeFrom<PayloadMap, never>,
+> = {
+	(payload: PayloadMap[Type]): _WithPayload_Action<PayloadMap, Type>;
 };
 
 export type ActionCreatorFrom<
