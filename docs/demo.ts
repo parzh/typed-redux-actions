@@ -2,7 +2,7 @@ import {
 	ActionCreatorFrom,
 	ActionTypeFrom,
 	ActionFrom,
-} from "..";
+} from "../lib";
 
 // Actions with payload
 const SET_USER_NAME = "SET_USER_NAME";
