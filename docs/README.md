@@ -55,8 +55,7 @@ All this can be implemented in a type-safe manner, if implemented properly in a 
 
 Let's imagine, what it might look like.
 
-## 2.1 Action types
-For **action types**, we might raise compile errors when the action type is unrecognized or misspelled:
+1. Raise compile errors when the **action type** is unrecognized or misspelled:
 
 ```ts
 const actionType: ActionType = "SET_NAME";
@@ -64,14 +63,13 @@ const actionType: ActionType = "SET_NAME";
 // [ts] Type '"SET_NAME"' is not assignable to type '"SET_USER_NAME" | "LOG_OUT"'.
 ```
 
-## 2.2 Actions
-For **actions** both type and payload should be constrained properly:
-
 ```ts
 const action: Action<"SET_NAME"> = {};
 //                   ^^^^^^^^^^
 // [ts] Type '"SET_NAME"' is not assignable to type '"SET_USER_NAME" | "LOG_OUT"'.
 ```
+
+1. Both type and payload of an **action** should be constrained properly:
 
 ```ts
 const action: Action<"LOG_OUT"> = {};
@@ -96,8 +94,7 @@ const action: Action<"SET_USER_NAME"> = {
 };
 ```
 
-## 2.3 Action creators
-Similar constraints would be useful for **action creators**:
+1. Similar constraints would be useful while working with **action creators**:
 
 ```ts
 const setUserName: ActionCreator<"SET_NAME"> = () => ({ /* ... */ });
@@ -146,23 +143,27 @@ To add type-safety and start taking advantages from it, first we must predefine 
 ```ts
 const SET_USER_NAME = "SET_USER_NAME"; // this is the JavaScript string (value)
 type SET_USER_NAME = "SET_USER_NAME"; // this is the TypeScript string literal (type)
+```
 
-// Let's throw in another action type for diversity
-const SET_USER_AGE = "SET_USER_AGE"; // this is the JavaScript string (value)
-type SET_USER_AGE = "SET_USER_AGE"; // this is the TypeScript string literal (type)
+Also, one might use the following more thorough approach (though I prefer the previous one, for its visual beauty):
 
-// ***
+```ts
+const SET_USER_NAME = "SET_USER_NAME";
+type SET_USER_NAME = typeof SET_USER_NAME;
+```
 
-// I recommend keeping apart
-// types of action with payload
-// and types of action without one
+Let's throw in another couple of action types for diversity:
 
-const LOG_OUT = "LOG_OUT"; // this is the JavaScript string (value)
-type LOG_OUT = "LOG_OUT"; // this is the TypeScript string literal (type)
+```ts
+const SET_USER_AGE = "SET_USER_AGE";
+type SET_USER_AGE = "SET_USER_AGE";
+
+const LOG_OUT = "LOG_OUT";
+type LOG_OUT = "LOG_OUT";
 ```
 
 ## 3.2 Create payload info
-Then, for all the actions that require payload we have to specify its type. The mapping of action type to payload type is done using an interface or an object-like type:
+Then, for all the actions we have to specify its type. The mapping of action type to payload type is done using an interface or an object-like type. The important part is that if an action does not require a payload, it is indicated by setting its payload type to `never`:
 
 ```ts
 type PayloadMap = {
@@ -172,62 +173,74 @@ type PayloadMap = {
     // The "SET_USER_AGE" action requires number as a payload
     [SET_USER_AGE]: number;
 
-    // The fact that the "LOG_OUT" action type is not present here 
-    // indicates that this action does not require any payload
+    // The "LOG_OUT" action never requires any payload
+    [LOG_OUT]: never;
 };
 ```
 
-## 3.3 Create useful generics
-In the "**2. Type-safety Roadmap**" section, types `Action<…>`, and `ActionCreator<…>` are [generic types], while the `ActionType` is just a union of all given action types.
-
-All these models have to be created though. In order to do that, the `@parzh/typed-redux-actions` package provides several generics; but let's call them "utilities", so that creators are not confused with creations. The utilities have convenient similarities: all end with "`…From`" suffix and all obey the same scheme of type parameters:
+I recommend keeping visual distance between types of payloaded actions and non-payloaded ones. Defining payload map using `interface` instead of a `type` might help with this, because interfaces are open and can be altered in consequent definitions:
 
 ```ts
-<PayloadMap, ActionTypeWithoutPayload, Type extends ActionType /* (if needed) */>
+// Actions with a payload
+interface PayloadMap {
+    [SET_USER_NAME]: string;
+    [SET_USER_AGE]: number;
+}
+
+// Actions without payload
+interface PayloadMap {
+    [LOG_OUT]: never;
+}
+```
+
+## 3.3 Create useful generics
+In the "**2. Type-safety Roadmap**" section, types `Action<…>`, and `ActionCreator<…>` are [generic types]. In order to create these models, the `@parzh/typed-redux-actions` package provides a creator for each: `ActionFrom<…>`, and `ActionCreatorFrom<…>`. Both utilities obey the same scheme of type parameters:
+
+```ts
+// preudocode
+type _From<PayloadMap extends object, Type extends keyof PayloadMap>
 ```
 
 ### 3.3.1 ActionType
 
-The `ActionTypeFrom<…>` utility, provided by the `@parzh/typed-redux-actions` package, creates union of all action types. It takes action types from keys of payload map and unites them with the string literal union of non-payloaded action types, provided as the second type parameter.
+First, defining the `ActionType` type would help a lot in the future. It should be a union of all string literals, by which actions types are represented:
 
 ```ts
-// Types of actions without payload are listed manually
-type ActionTypeWithoutPayload =
-    | LOG_OUT
-    | RELOAD_PAGE
-    ;
+export type ActionType = keyof PayloadMap;
 ```
+
+Alternatively, the `ActionTypeFrom` utility could be used, though it basically does the same thing:
 
 ```ts
 import { ActionTypeFrom } from "@parzh/typed-redux-actions";
 
 export type ActionType =
-    ActionTypeFrom<PayloadMap, ActionTypeWithoutPayload>;
+    ActionTypeFrom<PayloadMap>;
 ```
 
 ### 3.3.2 Action
 
-With the help of newly created `ActionType` union, along with `PayloadMap` and `ActionTypeWithoutPayload`, we create `Action<…>` generic, using `ActionFrom<…>` utility. In the section "**2.2 Actions**", we described a constraint that helped us intercept errors while specifying action type; the `<Type extends ActionType>` type guard does exactly that.
+We create `Action<…>` generic, using `ActionFrom<…>` utility:
 
 ```ts
 import { ActionFrom } from "@parzh/typed-redux-actions";
 
 export type Action<Type extends ActionType> =
-    ActionFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
+    ActionFrom<PayloadMap, Type>;
 ```
 
 ### 3.3.3 ActionCreator
 
-This code is extremely similar to the one in the previous section. Again, we use previously created types, generics, and symbols, but this time we move a step further, and define the `ActionCreator<…>` generic, using `ActionCreatorFrom<…>` utility. It will have the behavior described in the section "**2.3 Action creators**".
+This code is extremely similar to the one in the previous section:
 
 ```ts
 import { ActionCreatorFrom } from "@parzh/typed-redux-actions";
 
 export type ActionCreator<Type extends ActionType> =
-    ActionCreatorFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
+    ActionCreatorFrom<PayloadMap, Type>;
 ```
 
-See also [demo].
+To view these models in action, see [demo].
 
   [generic types]: https://www.typescriptlang.org/docs/handbook/generics.html
   [demo]: /docs/demo.ts

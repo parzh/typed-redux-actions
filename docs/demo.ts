@@ -1,6 +1,5 @@
 import {
 	ActionCreatorFrom,
-	ActionTypeFrom,
 	ActionFrom,
 } from "../lib";
 
@@ -11,13 +10,6 @@ type SET_USER_NAME = "SET_USER_NAME";
 const SET_USER_AGE = "SET_USER_AGE";
 type SET_USER_AGE = "SET_USER_AGE";
 
-type PayloadMap = {
-	[SET_USER_NAME]: string;
-	[SET_USER_AGE]: number;
-};
-
-// ***
-
 // Actions without payload
 const LOG_OUT = "LOG_OUT";
 type LOG_OUT = "LOG_OUT";
@@ -25,28 +17,27 @@ type LOG_OUT = "LOG_OUT";
 const RELOAD_PAGE = "RELOAD_PAGE";
 type RELOAD_PAGE = "RELOAD_PAGE";
 
-type ActionTypeWithoutPayload =
-	| LOG_OUT
-	| RELOAD_PAGE
-	; // "LOG_OUT" | "RELOAD_PAGE"
+interface PayloadMap {
+	// Actions with payload
+	[SET_USER_NAME]: string;
+	[SET_USER_AGE]: number;
+
+	// Actions without payload (all typed `never`)
+	[LOG_OUT]: never;
+	[RELOAD_PAGE]: never;
+}
 
 // ***
 
-type ActionType =
-	ActionTypeFrom<PayloadMap, ActionTypeWithoutPayload>;
+type Action<Type extends keyof PayloadMap> =
+	ActionFrom<PayloadMap, Type>;
 
-type Action<Type extends ActionType> =
-	ActionFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
-
-type ActionCreator<Type extends ActionType> =
-	ActionCreatorFrom<PayloadMap, ActionTypeWithoutPayload, Type>;
+type ActionCreator<Type extends keyof PayloadMap> =
+	ActionCreatorFrom<PayloadMap, Type>;
 
 // ***
 
 // Examples of errors
-
-// @ts-ignore (Type '""' is not assignable)
-const actionType0: ActionType = ""; // <- try autocompletion
 
 // @ts-ignore (Property 'type' is missing, Type '"LAG_OUT"' does not satisfy the constraint)
 const action0: Action<"LAG_OUT"> = {};
