@@ -27,7 +27,7 @@
   },
   "homepage": "https://gitlab.com/parzh/typed-redux-actions#readme",
   "dependencies": {
-    "typescript": "3.5.3"
+    "typescript": "3.9.3"
   },
   "directories": {
     "doc": "docs",
