@@ -5,9 +5,7 @@
   "private": false,
   "main": "index.d.ts",
   "types": "index.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/parzh/typed-redux-actions.git"
