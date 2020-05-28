@@ -3,6 +3,11 @@
   "version": "3.0.1",
   "description": "Utility types to create type-safe Redux actions",
   "private": false,
+  "files": [
+    "/index.d.ts",
+    "/LICENSE",
+    "/README.md"
+  ],
   "main": "index.d.ts",
   "types": "index.d.ts",
   "scripts": {},
