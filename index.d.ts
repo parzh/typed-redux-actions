@@ -1,4 +1,36 @@
-/** @private @see https://stackoverflow.com/a/54520829/4554883 */
+export type ActionTypeFrom<
+	PayloadMap extends object,
+> =
+	| keyof PayloadMap
+	;
+
+export type ActionFrom<
+	PayloadMap extends object,
+	Type extends ActionTypeFrom<PayloadMap>,
+> =
+	Type extends _WithPayload_ActionType<PayloadMap> ?
+		_WithPayload_Action<PayloadMap, Type>
+	:
+	Type extends _WithoutPayload_ActionType<PayloadMap> ?
+		_WithoutPayload_Action<PayloadMap, Type>
+	:
+		never;
+
+export type ActionCreatorFrom<
+	PayloadMap extends object,
+	Type extends ActionTypeFrom<PayloadMap>,
+> =
+	Type extends _WithPayload_ActionType<PayloadMap> ?
+		_WithPayload_ActionCreator<PayloadMap, Type>
+	:
+	Type extends _WithoutPayload_ActionType<PayloadMap> ?
+		_WithoutPayload_ActionCreator<PayloadMap, Type>
+	:
+		never;
+
+// ***
+
+/** @private */
 type _PickPropsTypedNever<
 	Obj extends object,
 > = {
@@ -6,12 +38,6 @@ type _PickPropsTypedNever<
 };
 
 // ***
-
-export type ActionTypeFrom<
-	PayloadMap extends object,
-> =
-	| keyof PayloadMap
-	;
 
 /** @private */
 type _WithoutPayload_ActionType<
@@ -46,18 +72,6 @@ type _WithPayload_Action<
 	payload: PayloadMap[Type];
 };
 
-export type ActionFrom<
-	PayloadMap extends object,
-	Type extends ActionTypeFrom<PayloadMap>,
-> =
-	Type extends _WithPayload_ActionType<PayloadMap> ?
-		_WithPayload_Action<PayloadMap, Type>
-	:
-	Type extends _WithoutPayload_ActionType<PayloadMap> ?
-		_WithoutPayload_Action<PayloadMap, Type>
-	:
-		never;
-
 // ***
 
 /** @private */
@@ -75,15 +89,3 @@ type _WithPayload_ActionCreator<
 > = {
 	(payload: PayloadMap[Type]): _WithPayload_Action<PayloadMap, Type>;
 };
-
-export type ActionCreatorFrom<
-	PayloadMap extends object,
-	Type extends ActionTypeFrom<PayloadMap>,
-> =
-	Type extends _WithPayload_ActionType<PayloadMap> ?
-		_WithPayload_ActionCreator<PayloadMap, Type>
-	:
-	Type extends _WithoutPayload_ActionType<PayloadMap> ?
-		_WithoutPayload_ActionCreator<PayloadMap, Type>
-	:
-		never;
