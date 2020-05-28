@@ -1,4 +1,4 @@
-# `typed-redux-actions`
+# `@parzh/typed-redux-actions`
 Type definitions for creating type-safe Redux actions.
 
 Go to [full guide] in the `/docs` folder (alternatively, use [direct link to the full guide]).
