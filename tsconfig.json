@@ -1,0 +1,10 @@
+{
+  "exclude": [
+    "docs",
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+  },
+}
