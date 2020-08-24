@@ -30,7 +30,6 @@
     "typescript": "3.9.3"
   },
   "directories": {
-    "doc": "docs",
-    "lib": "lib"
+    "doc": "docs"
   }
 }
