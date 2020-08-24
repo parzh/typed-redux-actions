@@ -11,10 +11,7 @@
   "main": "index.d.ts",
   "types": "index.d.ts",
   "scripts": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/parzh/typed-redux-actions.git"
-  },
+  "repository": "github:parzh/typed-redux-actions",
   "keywords": [
     "typescript",
     "type",
@@ -26,9 +23,9 @@
   "author": "Dmitry Parzhitsky <parzhitsky@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/parzh/typed-redux-actions/issues"
+    "url": "https://github.com/parzh/typed-redux-actions/issues"
   },
-  "homepage": "https://gitlab.com/parzh/typed-redux-actions#readme",
+  "homepage": "https://github.com/parzh/typed-redux-actions#readme",
   "dependencies": {
     "typescript": "3.9.3"
   },
