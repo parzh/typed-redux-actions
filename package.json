@@ -16,7 +16,9 @@
     "typescript",
     "type",
     "typed",
+    "react",
     "redux",
+    "store",
     "action",
     "actions"
   ],
