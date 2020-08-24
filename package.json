@@ -26,8 +26,8 @@
     "url": "https://github.com/parzh/typed-redux-actions/issues"
   },
   "homepage": "https://github.com/parzh/typed-redux-actions#readme",
-  "dependencies": {
-    "typescript": "3.9.3"
+  "peerDependencies": {
+    "typescript": "3.x.x"
   },
   "directories": {
     "doc": "docs"
